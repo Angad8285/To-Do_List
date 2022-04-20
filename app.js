@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const port = 1111;
+const port = process.env.PORT || 1111;
 const app = express();
 
 let toDoList = [];
