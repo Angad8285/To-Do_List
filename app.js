@@ -1,16 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const date = require(__dirname + '/date');
 
-const port = process.env.PORT ;
-// || 1111;
+
+const port = process.env.PORT || 1111;
 
 const app = express();
+
 
 /////////////////////////////////////////////CODE BEGINS HERE
 
 //////////  LIST INPUTS
 let toDoList = [];
-// let workList = [];
+let workList = [];
 
 /////////////////////////////////////////SETTING EJS
 app.set("view engine", 'ejs')
@@ -26,14 +28,7 @@ app.use(express.static("public"))
 ////////////////  GET HOME ROUTE
 app.get("/", function(req, res) {
 
-  let today = new Date();
-  let options = {
-    day: "2-digit",
-    weekday: "long",
-    month: "long",
-    year: "numeric"
-  }
-  let formatedtoday = today.toLocaleDateString("en-US", options)
+  let formatedtoday = date;
 
   res.render("lists", {
     listTitle: formatedtoday,
@@ -44,29 +39,34 @@ app.get("/", function(req, res) {
 //////////////////////////////  POST HOME ROUTE
 app.post("/", function(req, res) {
   userTypedItem1 = req.body.item1
+  if (req.body.list === "Work List") {
+    workList.push(userTypedItem1)
+    res.redirect("/work")
+  } else {
+    toDoList.push(" " + userTypedItem1)
+    res.redirect("/");
+  }
 
-  toDoList.push(" " + userTypedItem1)
-  res.redirect("/");
+  console.log(req.body)
 })
-//
-// //////////////////////////////////////////////////  WORK ROUTE
-//
-//
-// /////////////////  GET WORK ROUTE
-// app.get("/work", function(req, res){
-//   res.render("lists", {listTitle: "Work List", newListItem: workList})
-//   console.log("The work route is working.")
-// })
-//
-// ////////////////  POST WORK ROUTE
-// app.post("/work", function (req, res) {
-//   let item = req.body.item1;
-//   workList.push(item);
-//   res.redirect("/work")
-// })
+
+//////////////////////////////////////////////////  WORK ROUTE
 
 
+/////////////////  GET WORK ROUTE
+app.get("/work", function(req, res) {
+  res.render("lists", {
+    listTitle: "Work List",
+    newListItem: workList
+  })
+})
 
+////////////////  POST WORK ROUTE
+app.post("/work", function(req, res) {
+  let item = req.body.item1;
+  workList.push(item);
+  res.redirect("/work")
+})
 
 
 
@@ -77,6 +77,6 @@ app.post("/", function(req, res) {
 
 
 ///////////////////    SERVER SETTING UP
-app.listen( port, function() {
+app.listen(port, function() {
   console.log("The server is up and running on port " + port + ".")
 })
