@@ -4,35 +4,50 @@
 <head>
   <meta charset="utf-8">
   <title>To Do List</title>
-  <link rel="stylesheet" href="css/styles.css" <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+  <!-- DELETE BUTTON -->
+  <link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <!-- OVERALL CSS -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 </head>
 
 <body>
+
+
   <div class="box" id="heading">
     <h1><%= listTitle %></h1>
   </div>
 
-  <div class="box">
-    <% for (let i = 0; i < newListItem.length; i++) { %>
-    <div class="item">
-      <input type="checkbox">
-      <p><%= newListItem[i] %></p>
-    </div>
-    <% } %>
 
-    <form class="" action="/" method="post">
+  <div class="box">
+
+    <% newListItem.forEach(function(item){ %>
+      <div class="item">
+
+        <input type="checkbox">
+        <p><%= item.todo %></p>
+
+        <form class="" action="/delete" method="post">
+
+          <button type="submit" name="deleteButton" value="<%=item._id%>?<%=listTitle%>">
+            <span class="material-symbols-outlined">
+              delete
+            </span>
+          </button>
+
+        </form>
+
+      </div>
+    <% }) %>
+
+
+    <form class="addForm" action="/" method="post">
       <input type="text" name="item1" placeholder="New Item" autocomplete="off" required autofocus>
       <button class="add-btn" type="submit" name="list" value="<%= listTitle %>">+</button>
     </form>
+
   </div>
-
-
-
-
-
-
-
-
 
 
 </body>
